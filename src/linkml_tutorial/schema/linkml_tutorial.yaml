@@ -9,88 +9,233 @@ see_also:
   - https://tkphd.github.io/linkml-tutorial
 
 prefixes:
-  linkml_tutorial: https://w3id.org/tkphd/linkml-tutorial/
+  TUT: https://w3id.org/tkphd/linkml-tutorial/
   linkml: https://w3id.org/linkml/
-  biolink: https://w3id.org/biolink/
+  BIO: https://w3id.org/biolink/
   schema: http://schema.org/
   PATO: http://purl.obolibrary.org/obo/PATO_
-  example: https://example.org/
-default_prefix: linkml_tutorial
+  NCIT: http://purl.obolibrary.org/obo/NCIT_
+  FOODON: http://purl.obolibrary.org/obo/FOODON_
+  foaf: http://xmlns.com/foaf/0.1/
+  orcid: https://orcid.org/
+  wd: http://www.wikidata.org/entity/
+
+default_prefix: TUT
 default_range: string
 
 imports:
   - linkml:types
 
-classes:
+# This schema describes People and their Pets.
+# Building a database of people in a biomed context,
+# we might care about the following kinds of info:
+#
+# * Basic stats: age, birthdate, alive or dead
+# * Location: address
+# * Administrata: email, education, org, address
+# * Medical stats: alive or dead, exposures
+# * Environmental: pets, friends
 
+classes:
   NamedThing:
+    class_uri: schema:Thing
     description: >-
-      A generic grouping for any identifiable entity
+      A generic entity that has its own name
+    abstract: true
     slots:
       - id
+      - age_in_years
+      - birth_date
       - name
-      - description
-    class_uri: schema:Thing
 
   Person:
+    class_uri: schema:Person
     is_a: NamedThing
     description: >-
-      Represents a Person
+      A specific person
     slots:
       - primary_email
-      - birth_date
-      - age_in_years
       - vital_status
+      - pets
+    exact_mappings:  # does not import, but links out
+      - schema:Person
+      - BIO:Person
+      - foaf:Person
+      - wd:Q215627  # person
+      - wd:Q5  # human
+    id_prefixes:
+      - orcid
+      - wd
     slot_usage:
-      primary_email:
-        pattern: "^\\S+@[\\S+\\.]+\\S+"
+      id:
+        description: >-
+          This is a unique identifier for a person.
+
+  Animal:
+    is_a: NamedThing
+    description: >-
+      A specific animal
+    aliases:
+      - pet
+    slots:
+      - species
+      - breed
+      - color
+      - weight_in_mgs
+    exact_mappings:
+      - BIO:Animal
+      - NCIT:C14182
+      - wd:Q729  # animal
+    narrow_mappings:  # close, but too constrained
+      - FOODON:00003004  # animal as food product
+    rules:
+      - postconditions:
+          any_of:
+            - slot_conditions:
+                breed:
+                  required: true
+            - slot_conditions:
+                species:
+                  required: true
+          description: >-
+            At least one of Species or Breed should be populated.
+    unique_keys:
+      main:
+        description: >-
+          An animal can be uniquely specified by its name and birthdate.
+        unique_key_slots:
+          - name
+          - birth_date
 
   PersonCollection:
-    tree_root: true
     description: >-
-      A holder for Person objects
-    attributes:
-      entries:
-        range: Person
-        multivalued: true
-        inlined: true
+      A group of people
+    slots:
+      - entities
+
+  AnimalCollection:
+    tree_root: true  # entrypoint into a hierarchy?
+    description: >-
+      A group of animals
+    slots:
+      - animals
 
 slots:
+  # everybody has these
   id:
-    identifier: true
     slot_uri: schema:identifier
-    range: uriorcurie
-    description: A unique identifier for a thing
+    description: >-
+      Unique identifier for the individual
+    identifier: true  # implies "required"?
+    required: true
+    multivalued: false
+    range: uriorcurie  # string
+
   name:
     slot_uri: schema:name
-    description: A human-readable name for a thing
-  description:
-    slot_uri: schema:description
-    description: A human-readable description for a thing
-  primary_email:
-    slot_uri: schema:email
-    description: The main email address of a person
+    description: >-
+      Proper noun referring to the object
+    range: string
+
+  age_in_years:
+    description: >-
+      Number of trips around the sun experienced by an individual
+    range: integer
+
   birth_date:
+    description: >-
+      Date on which an individual was born
     slot_uri: schema:birthDate
     range: date
-    description: Date on which a person is born
-  age_in_years:
-    range: integer
-    description: Number of years since birth
+
+  pets:
+    description: >-
+      A group of companion animals
+    range: AnimalCollection
+
+  # people have these
+  primary_email:
+    slot_uri: schema:email
+    description: >-
+      Primary address for electronic mail
+    pattern: "^\\S+@[\\S+\\.]+\\S+"
+    range: string
+
   vital_status:
+    description: >-
+      Alive or Dead?
     range: PersonStatus
-    description: living or dead status
+    required: true
+
+  # animals have these
+  species:
+    description: >-
+      Taxonomic species of an animal
+    values_from:
+      - NCBITaxon
+    range: uriorcurie  # constrain by NCBITaxon
+
+  breed:
+    description: >-
+      Characteristic or strain or subspecies or variant
+    values_from:
+      - VBO  # vertebrate breed ontology
+    range: uriorcurie  # constrained by VBO
+
+  color:
+    description: >-
+      Characteristic exterior color of an animal
+    range: string
+
+  weight_in_mgs:
+    description: >-
+      Weight of an animal, measured in milligrams
+    range: integer
+
+  household_members:
+    description: >-
+      A list of cohabitating creatures
+    range: NamedThing  # Person or Animal
+
+  # collections
+  entities:
+    description: >-
+      A collection of people
+    range: Person
+    multivalued: true
+    inlined_as_list: true
+
+  animals:
+    description: >-
+      A collection of animals that live with a person
+    range: Animal
+    multivalued: true
+    inlined_as_list: true
 
 enums:
   PersonStatus:
+    description: >-
+      Vital status of a person
     permissible_values:
-      ALIVE:
-        description: the person is living
+      alive:
+        description: >-
+          The person is alive
         meaning: PATO:0001421
-      DEAD:
-        description: the person is deceased
+      dead:
+        description: >-
+          The person is deceased
         meaning: PATO:0001422
-      UNKNOWN:
-        description: the vital status is not known
-        todos:
-          - map this to an ontology
+      unknown:
+        description: >-
+          The vital status of this person is unknown
+
+  Breeds:
+    description: >-
+      Collection of known breeds
+    reachable_from:
+      source_ontology: bioregistry:vbo
+      source_nodes:
+        - VBO:00000000
+      is_direct: false
+      relationship_types:
+        - rdfs:subClassOf
