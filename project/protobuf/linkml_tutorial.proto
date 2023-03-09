@@ -1,23 +1,33 @@
-// A generic grouping for any identifiable entity
-message NamedThing
+// A specific animal
+message Animal
  {
   uriorcurie id = 0
+  integer ageInYears = 0
+  date birthDate = 0
   string name = 0
-  string description = 0
+  uriorcurie species = 0
+  uriorcurie breed = 0
+  string color = 0
+  integer weightInMgs = 0
  }
-// Represents a Person
+// A group of animals
+message AnimalCollection
+ {
+ repeated  animal animals = 0
+ }
+// A specific person
 message Person
  {
-  uriorcurie id = 0
-  string name = 0
-  string description = 0
-  string primaryEmail = 0
-  date birthDate = 0
   integer ageInYears = 0
+  date birthDate = 0
+  string name = 0
+  string primaryEmail = 0
   personStatus vitalStatus = 0
+  animalCollection pets = 0
+  uriorcurie id = 0
  }
-// A holder for Person objects
+// A group of people
 message PersonCollection
  {
- repeated  person entries = 0
+ repeated  person entities = 0
  }

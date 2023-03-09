@@ -1,64 +1,107 @@
 {
     "$defs": {
-        "NamedThing": {
+        "Animal": {
             "additionalProperties": false,
-            "description": "A generic grouping for any identifiable entity",
+            "description": "A specific animal",
             "properties": {
-                "description": {
-                    "description": "A human-readable description for a thing",
+                "age_in_years": {
+                    "description": "Number of trips around the sun experienced by an individual",
+                    "type": "integer"
+                },
+                "birth_date": {
+                    "description": "Date on which an individual was born",
+                    "format": "date",
+                    "type": "string"
+                },
+                "breed": {
+                    "description": "Characteristic or strain or subspecies or variant",
+                    "type": "string"
+                },
+                "color": {
+                    "description": "Characteristic exterior color of an animal",
                     "type": "string"
                 },
                 "id": {
-                    "description": "A unique identifier for a thing",
+                    "description": "Unique identifier for the individual",
                     "type": "string"
                 },
                 "name": {
-                    "description": "A human-readable name for a thing",
+                    "description": "Proper noun referring to the object",
                     "type": "string"
+                },
+                "species": {
+                    "description": "Taxonomic species of an animal",
+                    "type": "string"
+                },
+                "weight_in_mgs": {
+                    "description": "Weight of an animal, measured in milligrams",
+                    "type": "integer"
                 }
             },
             "required": [
                 "id"
             ],
-            "title": "NamedThing",
+            "title": "Animal",
             "type": "object"
+        },
+        "AnimalCollection": {
+            "additionalProperties": false,
+            "description": "A group of animals",
+            "properties": {
+                "animals": {
+                    "description": "A collection of animals that live with a person",
+                    "items": {
+                        "$ref": "#/$defs/Animal"
+                    },
+                    "type": "array"
+                }
+            },
+            "title": "AnimalCollection",
+            "type": "object"
+        },
+        "Breeds": {
+            "description": "Collection of known breeds",
+            "enum": [],
+            "title": "Breeds",
+            "type": "string"
         },
         "Person": {
             "additionalProperties": false,
-            "description": "Represents a Person",
+            "description": "A specific person",
             "properties": {
                 "age_in_years": {
-                    "description": "Number of years since birth",
+                    "description": "Number of trips around the sun experienced by an individual",
                     "type": "integer"
                 },
                 "birth_date": {
-                    "description": "Date on which a person is born",
+                    "description": "Date on which an individual was born",
                     "format": "date",
                     "type": "string"
                 },
-                "description": {
-                    "description": "A human-readable description for a thing",
-                    "type": "string"
-                },
                 "id": {
-                    "description": "A unique identifier for a thing",
+                    "description": "This is a unique identifier for a person.",
                     "type": "string"
                 },
                 "name": {
-                    "description": "A human-readable name for a thing",
+                    "description": "Proper noun referring to the object",
                     "type": "string"
                 },
+                "pets": {
+                    "$ref": "#/$defs/AnimalCollection",
+                    "description": "A group of companion animals"
+                },
                 "primary_email": {
-                    "description": "The main email address of a person",
+                    "description": "Primary address for electronic mail",
                     "pattern": "^\\S+@[\\S+\\.]+\\S+",
                     "type": "string"
                 },
                 "vital_status": {
                     "$ref": "#/$defs/PersonStatus",
-                    "description": "living or dead status"
+                    "description": "Alive or Dead?"
                 }
             },
             "required": [
+                "vital_status",
                 "id"
             ],
             "title": "Person",
@@ -66,66 +109,28 @@
         },
         "PersonCollection": {
             "additionalProperties": false,
-            "description": "A holder for Person objects",
+            "description": "A group of people",
             "properties": {
-                "entries": {
-                    "additionalProperties": {
-                        "$ref": "#/$defs/Person__identifier_optional"
+                "entities": {
+                    "description": "A collection of people",
+                    "items": {
+                        "$ref": "#/$defs/Person"
                     },
-                    "type": "object"
+                    "type": "array"
                 }
             },
             "title": "PersonCollection",
             "type": "object"
         },
         "PersonStatus": {
-            "description": "",
+            "description": "Vital status of a person",
             "enum": [
-                "ALIVE",
-                "DEAD",
-                "UNKNOWN"
+                "alive",
+                "dead",
+                "unknown"
             ],
             "title": "PersonStatus",
             "type": "string"
-        },
-        "Person__identifier_optional": {
-            "additionalProperties": false,
-            "description": "Represents a Person",
-            "properties": {
-                "age_in_years": {
-                    "description": "Number of years since birth",
-                    "type": "integer"
-                },
-                "birth_date": {
-                    "description": "Date on which a person is born",
-                    "format": "date",
-                    "type": "string"
-                },
-                "description": {
-                    "description": "A human-readable description for a thing",
-                    "type": "string"
-                },
-                "id": {
-                    "description": "A unique identifier for a thing",
-                    "type": "string"
-                },
-                "name": {
-                    "description": "A human-readable name for a thing",
-                    "type": "string"
-                },
-                "primary_email": {
-                    "description": "The main email address of a person",
-                    "pattern": "^\\S+@[\\S+\\.]+\\S+",
-                    "type": "string"
-                },
-                "vital_status": {
-                    "$ref": "#/$defs/PersonStatus",
-                    "description": "living or dead status"
-                }
-            },
-            "required": [],
-            "title": "Person",
-            "type": "object"
         }
     },
     "$id": "https://w3id.org/tkphd/linkml-tutorial",
@@ -133,12 +138,33 @@
     "additionalProperties": true,
     "metamodel_version": "1.7.0",
     "properties": {
-        "entries": {
-            "additionalProperties": {
-                "$ref": "#/$defs/Person__identifier_optional"
+        "animals": {
+            "description": "A collection of animals that live with a person",
+            "items": {
+                "$ref": "#/$defs/Animal"
             },
-            "type": "object"
+            "type": "array"
         }
+    },
+    "then": {
+        "anyOf": [
+            {
+                "properties": {
+                    "breed": {}
+                },
+                "required": [
+                    "breed"
+                ]
+            },
+            {
+                "properties": {
+                    "species": {}
+                },
+                "required": [
+                    "species"
+                ]
+            }
+        ]
     },
     "title": "linkml-tutorial",
     "type": "object",

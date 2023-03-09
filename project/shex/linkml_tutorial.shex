@@ -37,30 +37,50 @@ linkml:Objectidentifier IRI
 
 linkml:Nodeidentifier NONLITERAL
 
+<Animal> CLOSED {
+    (  $<Animal_tes> (  &<NamedThing_tes> ;
+          rdf:type [ schema:Thing ] ? ;
+          <species> @linkml:Uriorcurie ? ;
+          <breed> @linkml:Uriorcurie ? ;
+          <color> @linkml:String ? ;
+          <weight_in_mgs> @linkml:Integer ?
+       ) ;
+       rdf:type [ <Animal> ]
+    )
+}
+
+<AnimalCollection> CLOSED {
+    (  $<AnimalCollection_tes> <animals> @<Animal> * ;
+       rdf:type [ <AnimalCollection> ] ?
+    )
+}
+
 <NamedThing>  (
-    CLOSED {
-       (  $<NamedThing_tes> (  schema:name @linkml:String ? ;
-             schema:description @linkml:String ?
-          ) ;
-          rdf:type [ schema:Thing ]
-       )
-    } OR @<Person>
+    @<Animal> OR @<Person>
 )
+
+<NamedThing_struct> {
+    (  $<NamedThing_tes> (  <age_in_years> @linkml:Integer ? ;
+          schema:birthDate @linkml:Date ? ;
+          schema:name @linkml:String ?
+       ) ;
+       rdf:type [ schema:Thing ]
+    )
+}
 
 <Person> CLOSED {
     (  $<Person_tes> (  &<NamedThing_tes> ;
           rdf:type [ schema:Thing ] ? ;
           schema:email @linkml:String ? ;
-          schema:birthDate @linkml:Date ? ;
-          <age_in_years> @linkml:Integer ? ;
-          <vital_status> @<PersonStatus> ?
+          <vital_status> @<PersonStatus> ;
+          <pets> @<AnimalCollection> ?
        ) ;
-       rdf:type [ <Person> ]
+       rdf:type [ schema:Person ]
     )
 }
 
 <PersonCollection> CLOSED {
-    (  $<PersonCollection_tes> <entries> @<Person> * ;
+    (  $<PersonCollection_tes> <entities> @<Person> * ;
        rdf:type [ <PersonCollection> ] ?
     )
 }

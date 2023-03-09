@@ -1,11 +1,18 @@
 {
+   "BIO": "https://w3id.org/biolink/",
+   "FOODON": "http://purl.obolibrary.org/obo/FOODON_",
+   "NCIT": "http://purl.obolibrary.org/obo/NCIT_",
    "PATO": "http://purl.obolibrary.org/obo/PATO_",
-   "biolink": "https://w3id.org/biolink/",
-   "example": "https://example.org/",
+   "TUT": "https://w3id.org/tkphd/linkml-tutorial/",
+   "foaf": "http://xmlns.com/foaf/0.1/",
    "linkml": "https://w3id.org/linkml/",
-   "linkml_tutorial": "https://w3id.org/tkphd/linkml-tutorial/",
+   "orcid": "https://orcid.org/",
    "schema": "http://schema.org/",
+   "wd": "http://www.wikidata.org/entity/",
    "NamedThing": {
       "@id": "schema:Thing"
+   },
+   "Person": {
+      "@id": "schema:Person"
    }
 }

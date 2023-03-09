@@ -12,7 +12,7 @@
   "license": "MIT",
   "prefixes": [
     {
-      "prefix_prefix": "linkml_tutorial",
+      "prefix_prefix": "TUT",
       "prefix_reference": "https://w3id.org/tkphd/linkml-tutorial/"
     },
     {
@@ -20,7 +20,7 @@
       "prefix_reference": "https://w3id.org/linkml/"
     },
     {
-      "prefix_prefix": "biolink",
+      "prefix_prefix": "BIO",
       "prefix_reference": "https://w3id.org/biolink/"
     },
     {
@@ -32,11 +32,27 @@
       "prefix_reference": "http://purl.obolibrary.org/obo/PATO_"
     },
     {
-      "prefix_prefix": "example",
-      "prefix_reference": "https://example.org/"
+      "prefix_prefix": "NCIT",
+      "prefix_reference": "http://purl.obolibrary.org/obo/NCIT_"
+    },
+    {
+      "prefix_prefix": "FOODON",
+      "prefix_reference": "http://purl.obolibrary.org/obo/FOODON_"
+    },
+    {
+      "prefix_prefix": "foaf",
+      "prefix_reference": "http://xmlns.com/foaf/0.1/"
+    },
+    {
+      "prefix_prefix": "orcid",
+      "prefix_reference": "https://orcid.org/"
+    },
+    {
+      "prefix_prefix": "wd",
+      "prefix_reference": "http://www.wikidata.org/entity/"
     }
   ],
-  "default_prefix": "linkml_tutorial",
+  "default_prefix": "TUT",
   "default_range": "string",
   "types": [
     {
@@ -263,33 +279,46 @@
     {
       "name": "PersonStatus",
       "definition_uri": "https://w3id.org/tkphd/linkml-tutorial/PersonStatus",
+      "description": "Vital status of a person",
       "from_schema": "https://w3id.org/tkphd/linkml-tutorial",
       "permissible_values": [
         {
-          "text": "ALIVE",
-          "description": "the person is living",
+          "text": "alive",
+          "description": "The person is alive",
           "meaning": "PATO:0001421"
         },
         {
-          "text": "DEAD",
-          "description": "the person is deceased",
+          "text": "dead",
+          "description": "The person is deceased",
           "meaning": "PATO:0001422"
         },
         {
-          "text": "UNKNOWN",
-          "description": "the vital status is not known",
-          "todos": [
-            "map this to an ontology"
-          ]
+          "text": "unknown",
+          "description": "The vital status of this person is unknown"
         }
       ]
+    },
+    {
+      "name": "Breeds",
+      "definition_uri": "https://w3id.org/tkphd/linkml-tutorial/Breeds",
+      "description": "Collection of known breeds",
+      "from_schema": "https://w3id.org/tkphd/linkml-tutorial",
+      "reachable_from": {
+        "source_ontology": "bioregistry:vbo",
+        "source_nodes": [
+          "VBO:00000000"
+        ],
+        "relationship_types": [
+          "rdfs:subClassOf"
+        ]
+      }
     }
   ],
   "slots": [
     {
       "name": "id",
       "definition_uri": "https://w3id.org/tkphd/linkml-tutorial/id",
-      "description": "A unique identifier for a thing",
+      "description": "Unique identifier for the individual",
       "from_schema": "https://w3id.org/tkphd/linkml-tutorial",
       "mappings": [
         "http://schema.org/identifier"
@@ -307,7 +336,7 @@
     {
       "name": "name",
       "definition_uri": "https://w3id.org/tkphd/linkml-tutorial/name",
-      "description": "A human-readable name for a thing",
+      "description": "Proper noun referring to the object",
       "from_schema": "https://w3id.org/tkphd/linkml-tutorial",
       "mappings": [
         "http://schema.org/name"
@@ -321,25 +350,52 @@
       "@type": "SlotDefinition"
     },
     {
-      "name": "description",
-      "definition_uri": "https://w3id.org/tkphd/linkml-tutorial/description",
-      "description": "A human-readable description for a thing",
+      "name": "age_in_years",
+      "definition_uri": "https://w3id.org/tkphd/linkml-tutorial/age_in_years",
+      "description": "Number of trips around the sun experienced by an individual",
       "from_schema": "https://w3id.org/tkphd/linkml-tutorial",
-      "mappings": [
-        "http://schema.org/description"
-      ],
-      "slot_uri": "http://schema.org/description",
+      "slot_uri": "https://w3id.org/tkphd/linkml-tutorial/age_in_years",
       "owner": "NamedThing",
       "domain_of": [
         "NamedThing"
       ],
-      "range": "string",
+      "range": "integer",
+      "@type": "SlotDefinition"
+    },
+    {
+      "name": "birth_date",
+      "definition_uri": "https://w3id.org/tkphd/linkml-tutorial/birth_date",
+      "description": "Date on which an individual was born",
+      "from_schema": "https://w3id.org/tkphd/linkml-tutorial",
+      "mappings": [
+        "http://schema.org/birthDate"
+      ],
+      "slot_uri": "http://schema.org/birthDate",
+      "owner": "NamedThing",
+      "domain_of": [
+        "NamedThing"
+      ],
+      "range": "date",
+      "@type": "SlotDefinition"
+    },
+    {
+      "name": "pets",
+      "definition_uri": "https://w3id.org/tkphd/linkml-tutorial/pets",
+      "description": "A group of companion animals",
+      "from_schema": "https://w3id.org/tkphd/linkml-tutorial",
+      "slot_uri": "https://w3id.org/tkphd/linkml-tutorial/pets",
+      "owner": "Person",
+      "domain_of": [
+        "Person"
+      ],
+      "range": "AnimalCollection",
+      "inlined": true,
       "@type": "SlotDefinition"
     },
     {
       "name": "primary_email",
       "definition_uri": "https://w3id.org/tkphd/linkml-tutorial/primary_email",
-      "description": "The main email address of a person",
+      "description": "Primary address for electronic mail",
       "from_schema": "https://w3id.org/tkphd/linkml-tutorial",
       "mappings": [
         "http://schema.org/email"
@@ -350,41 +406,13 @@
         "Person"
       ],
       "range": "string",
-      "@type": "SlotDefinition"
-    },
-    {
-      "name": "birth_date",
-      "definition_uri": "https://w3id.org/tkphd/linkml-tutorial/birth_date",
-      "description": "Date on which a person is born",
-      "from_schema": "https://w3id.org/tkphd/linkml-tutorial",
-      "mappings": [
-        "http://schema.org/birthDate"
-      ],
-      "slot_uri": "http://schema.org/birthDate",
-      "owner": "Person",
-      "domain_of": [
-        "Person"
-      ],
-      "range": "date",
-      "@type": "SlotDefinition"
-    },
-    {
-      "name": "age_in_years",
-      "definition_uri": "https://w3id.org/tkphd/linkml-tutorial/age_in_years",
-      "description": "Number of years since birth",
-      "from_schema": "https://w3id.org/tkphd/linkml-tutorial",
-      "slot_uri": "https://w3id.org/tkphd/linkml-tutorial/age_in_years",
-      "owner": "Person",
-      "domain_of": [
-        "Person"
-      ],
-      "range": "integer",
+      "pattern": "^\\S+@[\\S+\\.]+\\S+",
       "@type": "SlotDefinition"
     },
     {
       "name": "vital_status",
       "definition_uri": "https://w3id.org/tkphd/linkml-tutorial/vital_status",
-      "description": "living or dead status",
+      "description": "Alive or Dead?",
       "from_schema": "https://w3id.org/tkphd/linkml-tutorial",
       "slot_uri": "https://w3id.org/tkphd/linkml-tutorial/vital_status",
       "owner": "Person",
@@ -392,42 +420,129 @@
         "Person"
       ],
       "range": "PersonStatus",
+      "required": true,
       "@type": "SlotDefinition"
     },
     {
-      "name": "personCollection__entries",
+      "name": "species",
+      "definition_uri": "https://w3id.org/tkphd/linkml-tutorial/species",
+      "description": "Taxonomic species of an animal",
       "from_schema": "https://w3id.org/tkphd/linkml-tutorial",
-      "slot_uri": "https://w3id.org/tkphd/linkml-tutorial/entries",
+      "values_from": [
+        "NCBITaxon"
+      ],
+      "slot_uri": "https://w3id.org/tkphd/linkml-tutorial/species",
+      "owner": "Animal",
+      "domain_of": [
+        "Animal"
+      ],
+      "range": "uriorcurie",
+      "@type": "SlotDefinition"
+    },
+    {
+      "name": "breed",
+      "definition_uri": "https://w3id.org/tkphd/linkml-tutorial/breed",
+      "description": "Characteristic or strain or subspecies or variant",
+      "from_schema": "https://w3id.org/tkphd/linkml-tutorial",
+      "values_from": [
+        "VBO"
+      ],
+      "slot_uri": "https://w3id.org/tkphd/linkml-tutorial/breed",
+      "owner": "Animal",
+      "domain_of": [
+        "Animal"
+      ],
+      "range": "uriorcurie",
+      "@type": "SlotDefinition"
+    },
+    {
+      "name": "color",
+      "definition_uri": "https://w3id.org/tkphd/linkml-tutorial/color",
+      "description": "Characteristic exterior color of an animal",
+      "from_schema": "https://w3id.org/tkphd/linkml-tutorial",
+      "slot_uri": "https://w3id.org/tkphd/linkml-tutorial/color",
+      "owner": "Animal",
+      "domain_of": [
+        "Animal"
+      ],
+      "range": "string",
+      "@type": "SlotDefinition"
+    },
+    {
+      "name": "weight_in_mgs",
+      "definition_uri": "https://w3id.org/tkphd/linkml-tutorial/weight_in_mgs",
+      "description": "Weight of an animal, measured in milligrams",
+      "from_schema": "https://w3id.org/tkphd/linkml-tutorial",
+      "slot_uri": "https://w3id.org/tkphd/linkml-tutorial/weight_in_mgs",
+      "owner": "Animal",
+      "domain_of": [
+        "Animal"
+      ],
+      "range": "integer",
+      "@type": "SlotDefinition"
+    },
+    {
+      "name": "household_members",
+      "definition_uri": "https://w3id.org/tkphd/linkml-tutorial/household_members",
+      "description": "A list of cohabitating creatures",
+      "from_schema": "https://w3id.org/tkphd/linkml-tutorial",
+      "slot_uri": "https://w3id.org/tkphd/linkml-tutorial/household_members",
+      "range": "NamedThing",
+      "@type": "SlotDefinition"
+    },
+    {
+      "name": "entities",
+      "definition_uri": "https://w3id.org/tkphd/linkml-tutorial/entities",
+      "description": "A collection of people",
+      "from_schema": "https://w3id.org/tkphd/linkml-tutorial",
+      "slot_uri": "https://w3id.org/tkphd/linkml-tutorial/entities",
       "multivalued": true,
-      "alias": "entries",
       "owner": "PersonCollection",
       "domain_of": [
         "PersonCollection"
       ],
       "range": "Person",
       "inlined": true,
+      "inlined_as_list": true,
       "@type": "SlotDefinition"
     },
     {
-      "name": "Person_primary_email",
-      "definition_uri": "https://w3id.org/tkphd/linkml-tutorial/primary_email",
-      "description": "The main email address of a person",
+      "name": "animals",
+      "definition_uri": "https://w3id.org/tkphd/linkml-tutorial/animals",
+      "description": "A collection of animals that live with a person",
+      "from_schema": "https://w3id.org/tkphd/linkml-tutorial",
+      "slot_uri": "https://w3id.org/tkphd/linkml-tutorial/animals",
+      "multivalued": true,
+      "owner": "AnimalCollection",
+      "domain_of": [
+        "AnimalCollection"
+      ],
+      "range": "Animal",
+      "inlined": true,
+      "inlined_as_list": true,
+      "@type": "SlotDefinition"
+    },
+    {
+      "name": "Person_id",
+      "definition_uri": "https://w3id.org/tkphd/linkml-tutorial/id",
+      "description": "This is a unique identifier for a person.",
       "from_schema": "https://w3id.org/tkphd/linkml-tutorial",
       "mappings": [
-        "http://schema.org/email"
+        "http://schema.org/identifier"
       ],
-      "is_a": "primary_email",
+      "is_a": "id",
       "domain": "Person",
-      "slot_uri": "http://schema.org/email",
-      "alias": "primary_email",
+      "slot_uri": "http://schema.org/identifier",
+      "identifier": true,
+      "alias": "id",
       "owner": "Person",
       "domain_of": [
         "Person"
       ],
       "is_usage_slot": true,
-      "usage_slot_name": "primary_email",
-      "range": "string",
-      "pattern": "^\\S+@[\\S+\\.]+\\S+",
+      "usage_slot_name": "id",
+      "range": "uriorcurie",
+      "required": true,
       "@type": "SlotDefinition"
     }
   ],
@@ -435,15 +550,17 @@
     {
       "name": "NamedThing",
       "definition_uri": "https://w3id.org/tkphd/linkml-tutorial/NamedThing",
-      "description": "A generic grouping for any identifiable entity",
+      "description": "A generic entity that has its own name",
       "from_schema": "https://w3id.org/tkphd/linkml-tutorial",
       "mappings": [
         "schema:Thing"
       ],
+      "abstract": true,
       "slots": [
         "id",
-        "name",
-        "description"
+        "age_in_years",
+        "birth_date",
+        "name"
       ],
       "slot_usage": {},
       "class_uri": "http://schema.org/Thing",
@@ -451,51 +568,141 @@
     },
     {
       "name": "Person",
+      "id_prefixes": [
+        "orcid",
+        "wd"
+      ],
       "definition_uri": "https://w3id.org/tkphd/linkml-tutorial/Person",
-      "description": "Represents a Person",
+      "description": "A specific person",
       "from_schema": "https://w3id.org/tkphd/linkml-tutorial",
+      "mappings": [
+        "schema:Person"
+      ],
+      "exact_mappings": [
+        "schema:Person",
+        "BIO:Person",
+        "foaf:Person",
+        "wd:Q215627",
+        "wd:Q5"
+      ],
+      "is_a": "NamedThing",
+      "slots": [
+        "age_in_years",
+        "birth_date",
+        "name",
+        "primary_email",
+        "vital_status",
+        "pets",
+        "Person_id"
+      ],
+      "slot_usage": {},
+      "class_uri": "http://schema.org/Person",
+      "@type": "ClassDefinition"
+    },
+    {
+      "name": "Animal",
+      "definition_uri": "https://w3id.org/tkphd/linkml-tutorial/Animal",
+      "description": "A specific animal",
+      "from_schema": "https://w3id.org/tkphd/linkml-tutorial",
+      "aliases": [
+        "pet"
+      ],
+      "exact_mappings": [
+        "BIO:Animal",
+        "NCIT:C14182",
+        "wd:Q729"
+      ],
+      "narrow_mappings": [
+        "FOODON:00003004"
+      ],
       "is_a": "NamedThing",
       "slots": [
         "id",
-        "name",
-        "description",
-        "Person_primary_email",
-        "birth_date",
         "age_in_years",
-        "vital_status"
+        "birth_date",
+        "name",
+        "species",
+        "breed",
+        "color",
+        "weight_in_mgs"
       ],
       "slot_usage": {},
-      "class_uri": "https://w3id.org/tkphd/linkml-tutorial/Person",
+      "class_uri": "https://w3id.org/tkphd/linkml-tutorial/Animal",
+      "unique_keys": [
+        {
+          "unique_key_name": "main",
+          "unique_key_slots": [
+            "name",
+            "birth_date"
+          ],
+          "description": "An animal can be uniquely specified by its name and birthdate.",
+          "@type": "UniqueKey"
+        }
+      ],
+      "rules": [
+        {
+          "postconditions": {
+            "description": "At least one of Species or Breed should be populated.",
+            "any_of": [
+              {
+                "slot_conditions": [
+                  {
+                    "name": "breed",
+                    "required": true,
+                    "@type": "SlotDefinition"
+                  }
+                ],
+                "@type": "AnonymousClassExpression"
+              },
+              {
+                "slot_conditions": [
+                  {
+                    "name": "species",
+                    "required": true,
+                    "@type": "SlotDefinition"
+                  }
+                ],
+                "@type": "AnonymousClassExpression"
+              }
+            ],
+            "@type": "AnonymousClassExpression"
+          },
+          "@type": "ClassRule"
+        }
+      ],
       "@type": "ClassDefinition"
     },
     {
       "name": "PersonCollection",
       "definition_uri": "https://w3id.org/tkphd/linkml-tutorial/PersonCollection",
-      "description": "A holder for Person objects",
+      "description": "A group of people",
       "from_schema": "https://w3id.org/tkphd/linkml-tutorial",
       "slots": [
-        "personCollection__entries"
+        "entities"
       ],
       "slot_usage": {},
-      "attributes": [
-        {
-          "name": "entries",
-          "multivalued": true,
-          "range": "Person",
-          "inlined": true,
-          "@type": "SlotDefinition"
-        }
-      ],
       "class_uri": "https://w3id.org/tkphd/linkml-tutorial/PersonCollection",
+      "@type": "ClassDefinition"
+    },
+    {
+      "name": "AnimalCollection",
+      "definition_uri": "https://w3id.org/tkphd/linkml-tutorial/AnimalCollection",
+      "description": "A group of animals",
+      "from_schema": "https://w3id.org/tkphd/linkml-tutorial",
+      "slots": [
+        "animals"
+      ],
+      "slot_usage": {},
+      "class_uri": "https://w3id.org/tkphd/linkml-tutorial/AnimalCollection",
       "tree_root": true,
       "@type": "ClassDefinition"
     }
   ],
   "metamodel_version": "1.7.0",
   "source_file": "linkml_tutorial.yaml",
-  "source_file_date": "2023-03-08T16:51:48",
-  "source_file_size": 2188,
-  "generation_date": "2023-03-08T16:52:06",
+  "source_file_date": "2023-03-08T23:00:44",
+  "source_file_size": 5430,
+  "generation_date": "2023-03-08T23:07:33",
   "@type": "SchemaDefinition",
   "@context": [
     "project/jsonld/linkml_tutorial.context.jsonld",

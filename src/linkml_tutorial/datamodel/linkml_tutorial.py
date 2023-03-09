@@ -1,5 +1,5 @@
 # Auto generated from linkml_tutorial.yaml by pythongen.py version: 0.9.0
-# Generation date: 2023-03-08T16:52:11
+# Generation date: 2023-03-08T23:07:40
 # Schema: linkml-tutorial
 #
 # id: https://w3id.org/tkphd/linkml-tutorial
@@ -32,13 +32,17 @@ version = None
 dataclasses._init_fn = dataclasses_init_fn_with_kwargs
 
 # Namespaces
+BIO = CurieNamespace('BIO', 'https://w3id.org/biolink/')
+FOODON = CurieNamespace('FOODON', 'http://purl.obolibrary.org/obo/FOODON_')
+NCIT = CurieNamespace('NCIT', 'http://purl.obolibrary.org/obo/NCIT_')
 PATO = CurieNamespace('PATO', 'http://purl.obolibrary.org/obo/PATO_')
-BIOLINK = CurieNamespace('biolink', 'https://w3id.org/biolink/')
-EXAMPLE = CurieNamespace('example', 'https://example.org/')
+TUT = CurieNamespace('TUT', 'https://w3id.org/tkphd/linkml-tutorial/')
+FOAF = CurieNamespace('foaf', 'http://xmlns.com/foaf/0.1/')
 LINKML = CurieNamespace('linkml', 'https://w3id.org/linkml/')
-LINKML_TUTORIAL = CurieNamespace('linkml_tutorial', 'https://w3id.org/tkphd/linkml-tutorial/')
+ORCID = CurieNamespace('orcid', 'https://orcid.org/')
 SCHEMA = CurieNamespace('schema', 'http://schema.org/')
-DEFAULT_ = LINKML_TUTORIAL
+WD = CurieNamespace('wd', 'http://www.wikidata.org/entity/')
+DEFAULT_ = TUT
 
 
 # Types
@@ -52,21 +56,26 @@ class PersonId(NamedThingId):
     pass
 
 
+class AnimalId(NamedThingId):
+    pass
+
+
 @dataclass
 class NamedThing(YAMLRoot):
     """
-    A generic grouping for any identifiable entity
+    A generic entity that has its own name
     """
     _inherited_slots: ClassVar[List[str]] = []
 
     class_class_uri: ClassVar[URIRef] = SCHEMA.Thing
     class_class_curie: ClassVar[str] = "schema:Thing"
     class_name: ClassVar[str] = "NamedThing"
-    class_model_uri: ClassVar[URIRef] = LINKML_TUTORIAL.NamedThing
+    class_model_uri: ClassVar[URIRef] = TUT.NamedThing
 
     id: Union[str, NamedThingId] = None
+    age_in_years: Optional[int] = None
+    birth_date: Optional[Union[str, XSDDate]] = None
     name: Optional[str] = None
-    description: Optional[str] = None
 
     def __post_init__(self, *_: List[str], **kwargs: Dict[str, Any]):
         if self._is_empty(self.id):
@@ -74,11 +83,14 @@ class NamedThing(YAMLRoot):
         if not isinstance(self.id, NamedThingId):
             self.id = NamedThingId(self.id)
 
+        if self.age_in_years is not None and not isinstance(self.age_in_years, int):
+            self.age_in_years = int(self.age_in_years)
+
+        if self.birth_date is not None and not isinstance(self.birth_date, XSDDate):
+            self.birth_date = XSDDate(self.birth_date)
+
         if self.name is not None and not isinstance(self.name, str):
             self.name = str(self.name)
-
-        if self.description is not None and not isinstance(self.description, str):
-            self.description = str(self.description)
 
         super().__post_init__(**kwargs)
 
@@ -86,20 +98,19 @@ class NamedThing(YAMLRoot):
 @dataclass
 class Person(NamedThing):
     """
-    Represents a Person
+    A specific person
     """
     _inherited_slots: ClassVar[List[str]] = []
 
-    class_class_uri: ClassVar[URIRef] = LINKML_TUTORIAL.Person
-    class_class_curie: ClassVar[str] = "linkml_tutorial:Person"
+    class_class_uri: ClassVar[URIRef] = SCHEMA.Person
+    class_class_curie: ClassVar[str] = "schema:Person"
     class_name: ClassVar[str] = "Person"
-    class_model_uri: ClassVar[URIRef] = LINKML_TUTORIAL.Person
+    class_model_uri: ClassVar[URIRef] = TUT.Person
 
     id: Union[str, PersonId] = None
+    vital_status: Union[str, "PersonStatus"] = None
     primary_email: Optional[str] = None
-    birth_date: Optional[Union[str, XSDDate]] = None
-    age_in_years: Optional[int] = None
-    vital_status: Optional[Union[str, "PersonStatus"]] = None
+    pets: Optional[Union[dict, "AnimalCollection"]] = None
 
     def __post_init__(self, *_: List[str], **kwargs: Dict[str, Any]):
         if self._is_empty(self.id):
@@ -107,17 +118,55 @@ class Person(NamedThing):
         if not isinstance(self.id, PersonId):
             self.id = PersonId(self.id)
 
+        if self._is_empty(self.vital_status):
+            self.MissingRequiredField("vital_status")
+        if not isinstance(self.vital_status, PersonStatus):
+            self.vital_status = PersonStatus(self.vital_status)
+
         if self.primary_email is not None and not isinstance(self.primary_email, str):
             self.primary_email = str(self.primary_email)
 
-        if self.birth_date is not None and not isinstance(self.birth_date, XSDDate):
-            self.birth_date = XSDDate(self.birth_date)
+        if self.pets is not None and not isinstance(self.pets, AnimalCollection):
+            self.pets = AnimalCollection(**as_dict(self.pets))
 
-        if self.age_in_years is not None and not isinstance(self.age_in_years, int):
-            self.age_in_years = int(self.age_in_years)
+        super().__post_init__(**kwargs)
 
-        if self.vital_status is not None and not isinstance(self.vital_status, PersonStatus):
-            self.vital_status = PersonStatus(self.vital_status)
+
+@dataclass
+class Animal(NamedThing):
+    """
+    A specific animal
+    """
+    _inherited_slots: ClassVar[List[str]] = []
+
+    class_class_uri: ClassVar[URIRef] = TUT.Animal
+    class_class_curie: ClassVar[str] = "TUT:Animal"
+    class_name: ClassVar[str] = "Animal"
+    class_model_uri: ClassVar[URIRef] = TUT.Animal
+
+    id: Union[str, AnimalId] = None
+    species: Optional[Union[str, URIorCURIE]] = None
+    breed: Optional[Union[str, URIorCURIE]] = None
+    color: Optional[str] = None
+    weight_in_mgs: Optional[int] = None
+
+    def __post_init__(self, *_: List[str], **kwargs: Dict[str, Any]):
+        if self._is_empty(self.id):
+            self.MissingRequiredField("id")
+        if not isinstance(self.id, AnimalId):
+            self.id = AnimalId(self.id)
+
+        if self.species is not None and not isinstance(self.species, URIorCURIE):
+            self.species = URIorCURIE(self.species)
+
+        if self.breed is not None and not isinstance(self.breed, URIorCURIE):
+            self.breed = URIorCURIE(self.breed)
+
+        if self.color is not None and not isinstance(self.color, str):
+            self.color = str(self.color)
+
+        if self.weight_in_mgs is not None and not isinstance(self.weight_in_mgs, int):
+            self.weight_in_mgs = int(self.weight_in_mgs)
 
         super().__post_init__(**kwargs)
 
@@ -125,37 +174,69 @@ class Person(NamedThing):
 @dataclass
 class PersonCollection(YAMLRoot):
     """
-    A holder for Person objects
+    A group of people
     """
     _inherited_slots: ClassVar[List[str]] = []
 
-    class_class_uri: ClassVar[URIRef] = LINKML_TUTORIAL.PersonCollection
-    class_class_curie: ClassVar[str] = "linkml_tutorial:PersonCollection"
+    class_class_uri: ClassVar[URIRef] = TUT.PersonCollection
+    class_class_curie: ClassVar[str] = "TUT:PersonCollection"
     class_name: ClassVar[str] = "PersonCollection"
-    class_model_uri: ClassVar[URIRef] = LINKML_TUTORIAL.PersonCollection
+    class_model_uri: ClassVar[URIRef] = TUT.PersonCollection
 
-    entries: Optional[Union[Dict[Union[str, PersonId], Union[dict, Person]], List[Union[dict, Person]]]] = empty_dict()
+    entities: Optional[Union[Dict[Union[str, PersonId], Union[dict, Person]], List[Union[dict, Person]]]] = empty_dict()
 
     def __post_init__(self, *_: List[str], **kwargs: Dict[str, Any]):
-        self._normalize_inlined_as_dict(slot_name="entries", slot_type=Person, key_name="id", keyed=True)
+        self._normalize_inlined_as_list(slot_name="entities", slot_type=Person, key_name="id", keyed=True)
+
+        super().__post_init__(**kwargs)
+
+
+@dataclass
+class AnimalCollection(YAMLRoot):
+    """
+    A group of animals
+    """
+    _inherited_slots: ClassVar[List[str]] = []
+
+    class_class_uri: ClassVar[URIRef] = TUT.AnimalCollection
+    class_class_curie: ClassVar[str] = "TUT:AnimalCollection"
+    class_name: ClassVar[str] = "AnimalCollection"
+    class_model_uri: ClassVar[URIRef] = TUT.AnimalCollection
+
+    animals: Optional[Union[Dict[Union[str, AnimalId], Union[dict, Animal]], List[Union[dict, Animal]]]] = empty_dict()
+
+    def __post_init__(self, *_: List[str], **kwargs: Dict[str, Any]):
+        self._normalize_inlined_as_list(slot_name="animals", slot_type=Animal, key_name="id", keyed=True)
 
         super().__post_init__(**kwargs)
 
 
 # Enumerations
 class PersonStatus(EnumDefinitionImpl):
-
-    ALIVE = PermissibleValue(text="ALIVE",
-                                 description="the person is living",
+    """
+    Vital status of a person
+    """
+    alive = PermissibleValue(text="alive",
+                                 description="The person is alive",
                                  meaning=PATO["0001421"])
-    DEAD = PermissibleValue(text="DEAD",
-                               description="the person is deceased",
+    dead = PermissibleValue(text="dead",
+                               description="The person is deceased",
                                meaning=PATO["0001422"])
-    UNKNOWN = PermissibleValue(text="UNKNOWN",
-                                     description="the vital status is not known")
+    unknown = PermissibleValue(text="unknown",
+                                     description="The vital status of this person is unknown")
 
     _defn = EnumDefinition(
         name="PersonStatus",
+        description="Vital status of a person",
+    )
+
+class Breeds(EnumDefinitionImpl):
+    """
+    Collection of known breeds
+    """
+    _defn = EnumDefinition(
+        name="Breeds",
+        description="Collection of known breeds",
     )
 
 # Slots
@@ -163,29 +244,47 @@ class slots:
     pass
 
 slots.id = Slot(uri=SCHEMA.identifier, name="id", curie=SCHEMA.curie('identifier'),
-                   model_uri=LINKML_TUTORIAL.id, domain=None, range=URIRef)
+                   model_uri=TUT.id, domain=None, range=URIRef)
 
 slots.name = Slot(uri=SCHEMA.name, name="name", curie=SCHEMA.curie('name'),
-                   model_uri=LINKML_TUTORIAL.name, domain=None, range=Optional[str])
+                   model_uri=TUT.name, domain=None, range=Optional[str])
 
-slots.description = Slot(uri=SCHEMA.description, name="description", curie=SCHEMA.curie('description'),
-                   model_uri=LINKML_TUTORIAL.description, domain=None, range=Optional[str])
-
-slots.primary_email = Slot(uri=SCHEMA.email, name="primary_email", curie=SCHEMA.curie('email'),
-                   model_uri=LINKML_TUTORIAL.primary_email, domain=None, range=Optional[str])
+slots.age_in_years = Slot(uri=TUT.age_in_years, name="age_in_years", curie=TUT.curie('age_in_years'),
+                   model_uri=TUT.age_in_years, domain=None, range=Optional[int])
 
 slots.birth_date = Slot(uri=SCHEMA.birthDate, name="birth_date", curie=SCHEMA.curie('birthDate'),
-                   model_uri=LINKML_TUTORIAL.birth_date, domain=None, range=Optional[Union[str, XSDDate]])
+                   model_uri=TUT.birth_date, domain=None, range=Optional[Union[str, XSDDate]])
 
-slots.age_in_years = Slot(uri=LINKML_TUTORIAL.age_in_years, name="age_in_years", curie=LINKML_TUTORIAL.curie('age_in_years'),
-                   model_uri=LINKML_TUTORIAL.age_in_years, domain=None, range=Optional[int])
+slots.pets = Slot(uri=TUT.pets, name="pets", curie=TUT.curie('pets'),
+                   model_uri=TUT.pets, domain=None, range=Optional[Union[dict, AnimalCollection]])
 
-slots.vital_status = Slot(uri=LINKML_TUTORIAL.vital_status, name="vital_status", curie=LINKML_TUTORIAL.curie('vital_status'),
-                   model_uri=LINKML_TUTORIAL.vital_status, domain=None, range=Optional[Union[str, "PersonStatus"]])
-
-slots.personCollection__entries = Slot(uri=LINKML_TUTORIAL.entries, name="personCollection__entries", curie=LINKML_TUTORIAL.curie('entries'),
-                   model_uri=LINKML_TUTORIAL.personCollection__entries, domain=None, range=Optional[Union[Dict[Union[str, PersonId], Union[dict, Person]], List[Union[dict, Person]]]])
-
-slots.Person_primary_email = Slot(uri=SCHEMA.email, name="Person_primary_email", curie=SCHEMA.curie('email'),
-                   model_uri=LINKML_TUTORIAL.Person_primary_email, domain=Person, range=Optional[str],
+slots.primary_email = Slot(uri=SCHEMA.email, name="primary_email", curie=SCHEMA.curie('email'),
+                   model_uri=TUT.primary_email, domain=None, range=Optional[str],
                    pattern=re.compile(r'^\S+@[\S+\.]+\S+'))
+
+slots.vital_status = Slot(uri=TUT.vital_status, name="vital_status", curie=TUT.curie('vital_status'),
+                   model_uri=TUT.vital_status, domain=None, range=Union[str, "PersonStatus"])
+
+slots.species = Slot(uri=TUT.species, name="species", curie=TUT.curie('species'),
+                   model_uri=TUT.species, domain=None, range=Optional[Union[str, URIorCURIE]])
+
+slots.breed = Slot(uri=TUT.breed, name="breed", curie=TUT.curie('breed'),
+                   model_uri=TUT.breed, domain=None, range=Optional[Union[str, URIorCURIE]])
+
+slots.color = Slot(uri=TUT.color, name="color", curie=TUT.curie('color'),
+                   model_uri=TUT.color, domain=None, range=Optional[str])
+
+slots.weight_in_mgs = Slot(uri=TUT.weight_in_mgs, name="weight_in_mgs", curie=TUT.curie('weight_in_mgs'),
+                   model_uri=TUT.weight_in_mgs, domain=None, range=Optional[int])
+
+slots.household_members = Slot(uri=TUT.household_members, name="household_members", curie=TUT.curie('household_members'),
+                   model_uri=TUT.household_members, domain=None, range=Optional[Union[str, NamedThingId]])
+
+slots.entities = Slot(uri=TUT.entities, name="entities", curie=TUT.curie('entities'),
+                   model_uri=TUT.entities, domain=None, range=Optional[Union[Dict[Union[str, PersonId], Union[dict, Person]], List[Union[dict, Person]]]])
+
+slots.animals = Slot(uri=TUT.animals, name="animals", curie=TUT.curie('animals'),
+                   model_uri=TUT.animals, domain=None, range=Optional[Union[Dict[Union[str, AnimalId], Union[dict, Animal]], List[Union[dict, Animal]]]])
+
+slots.Person_id = Slot(uri=SCHEMA.identifier, name="Person_id", curie=SCHEMA.curie('identifier'),
+                   model_uri=TUT.Person_id, domain=Person, range=Union[str, PersonId])

@@ -1,23 +1,41 @@
-type NamedThing
+type Animal
   {
     id: Uriorcurie!
+    ageInYears: Integer
+    birthDate: Date
     name: String
-    description: String
+    species: Uriorcurie
+    breed: Uriorcurie
+    color: String
+    weightInMgs: Integer
+  }
+
+type AnimalCollection
+  {
+    animals: [Animal]
+  }
+
+interface NamedThing
+  {
+    id: Uriorcurie!
+    ageInYears: Integer
+    birthDate: Date
+    name: String
   }
 
 type Person
   {
-    id: Uriorcurie!
-    name: String
-    description: String
-    primaryEmail: String
-    birthDate: Date
     ageInYears: Integer
-    vitalStatus: PersonStatus
+    birthDate: Date
+    name: String
+    primaryEmail: String
+    vitalStatus: PersonStatus!
+    pets: AnimalCollection
+    id: Uriorcurie!
   }
 
 type PersonCollection
   {
-    entries: [Person]
+    entities: [Person]
   }
 

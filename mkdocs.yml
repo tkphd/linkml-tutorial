@@ -2,9 +2,9 @@
 site_name: "linkml-tutorial"
 theme:
   name: material
-  # palette:
-  #  scheme: slate
-  #  primary: cyan
+  palette:
+    scheme: slate
+    primary: cyan
   features:
     - content.tabs.link
 plugins:
