@@ -1,6 +1,13 @@
 # Example data object
 ---
-id: example:Person001
-name: foo bar
-primary_email: foo.bar@example.com
-age_in_years: 33
+entities:
+  - id: example:Person001
+    name: Foo Bar
+    primary_email: foo.bar@example.com
+    age_in_years: 32
+    vital_status: alive
+  - id: example:Person002
+    name: Boo Far
+    primary_email: boo.far@example.com
+    age_in_years: 23
+    vital_status: alive

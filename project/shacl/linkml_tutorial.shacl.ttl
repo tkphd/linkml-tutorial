@@ -9,7 +9,11 @@ schema:Thing a sh:NodeShape ;
     sh:closed false ;
     sh:description "A generic entity that has its own name" ;
     sh:ignoredProperties ( rdf:type ) ;
-    sh:property [ sh:description "Unique identifier for the individual" ;
+    sh:property [ sh:description "Date on which an individual was born" ;
+            sh:maxCount 1 ;
+            sh:order 2 ;
+            sh:path schema:birthDate ],
+        [ sh:description "Unique identifier for the individual" ;
             sh:maxCount 1 ;
             sh:minCount 1 ;
             sh:order 0 ;
@@ -21,11 +25,7 @@ schema:Thing a sh:NodeShape ;
         [ sh:description "Number of trips around the sun experienced by an individual" ;
             sh:maxCount 1 ;
             sh:order 1 ;
-            sh:path TUT:age_in_years ],
-        [ sh:description "Date on which an individual was born" ;
-            sh:maxCount 1 ;
-            sh:order 2 ;
-            sh:path schema:birthDate ] ;
+            sh:path TUT:age_in_years ] ;
     sh:targetClass schema:Thing .
 
 TUT:PersonCollection a sh:NodeShape ;
@@ -43,22 +43,12 @@ schema:Person a sh:NodeShape ;
     sh:closed true ;
     sh:description "A specific person" ;
     sh:ignoredProperties ( rdf:type ) ;
-    sh:property [ sh:description "Number of trips around the sun experienced by an individual" ;
-            sh:maxCount 1 ;
-            sh:order 4 ;
-            sh:path TUT:age_in_years ],
-        [ sh:class TUT:AnimalCollection ;
+    sh:property [ sh:class TUT:AnimalCollection ;
             sh:description "A group of companion animals" ;
             sh:maxCount 1 ;
             sh:nodeKind sh:BlankNode ;
             sh:order 2 ;
             sh:path TUT:pets ],
-        [ sh:description "Alive or Dead?" ;
-            sh:in ( PATO:0001421 PATO:0001422 "unknown" ) ;
-            sh:maxCount 1 ;
-            sh:minCount 1 ;
-            sh:order 1 ;
-            sh:path TUT:vital_status ],
         [ sh:description "This is a unique identifier for a person." ;
             sh:maxCount 1 ;
             sh:minCount 1 ;
@@ -69,21 +59,35 @@ schema:Person a sh:NodeShape ;
             sh:order 0 ;
             sh:path schema:email ;
             sh:pattern "^\\S+@[\\S+\\.]+\\S+" ],
+        [ sh:description "Proper noun referring to the object" ;
+            sh:maxCount 1 ;
+            sh:order 6 ;
+            sh:path schema:name ],
         [ sh:description "Date on which an individual was born" ;
             sh:maxCount 1 ;
             sh:order 5 ;
             sh:path schema:birthDate ],
-        [ sh:description "Proper noun referring to the object" ;
+        [ sh:description "Alive or Dead?" ;
+            sh:in ( PATO:0001421 PATO:0001422 "unknown" ) ;
             sh:maxCount 1 ;
-            sh:order 6 ;
-            sh:path schema:name ] ;
+            sh:minCount 1 ;
+            sh:order 1 ;
+            sh:path TUT:vital_status ],
+        [ sh:description "Number of trips around the sun experienced by an individual" ;
+            sh:maxCount 1 ;
+            sh:order 4 ;
+            sh:path TUT:age_in_years ] ;
     sh:targetClass schema:Person .
 
 TUT:Animal a sh:NodeShape ;
     sh:closed true ;
     sh:description "A specific animal" ;
     sh:ignoredProperties ( rdf:type ) ;
-    sh:property [ sh:description "Characteristic or strain or subspecies or variant" ;
+    sh:property [ sh:description "Number of trips around the sun experienced by an individual" ;
+            sh:maxCount 1 ;
+            sh:order 5 ;
+            sh:path TUT:age_in_years ],
+        [ sh:description "Characteristic or strain or subspecies or variant" ;
             sh:maxCount 1 ;
             sh:order 1 ;
             sh:path TUT:breed ],
@@ -91,18 +95,18 @@ TUT:Animal a sh:NodeShape ;
             sh:maxCount 1 ;
             sh:order 2 ;
             sh:path TUT:color ],
-        [ sh:description "Taxonomic species of an animal" ;
-            sh:maxCount 1 ;
-            sh:order 0 ;
-            sh:path TUT:species ],
         [ sh:description "Proper noun referring to the object" ;
             sh:maxCount 1 ;
             sh:order 7 ;
             sh:path schema:name ],
-        [ sh:description "Number of trips around the sun experienced by an individual" ;
+        [ sh:description "Weight of an animal, measured in milligrams" ;
             sh:maxCount 1 ;
-            sh:order 5 ;
-            sh:path TUT:age_in_years ],
+            sh:order 3 ;
+            sh:path TUT:weight_in_mgs ],
+        [ sh:description "Taxonomic species of an animal" ;
+            sh:maxCount 1 ;
+            sh:order 0 ;
+            sh:path TUT:species ],
         [ sh:description "Date on which an individual was born" ;
             sh:maxCount 1 ;
             sh:order 6 ;
@@ -111,11 +115,7 @@ TUT:Animal a sh:NodeShape ;
             sh:maxCount 1 ;
             sh:minCount 1 ;
             sh:order 4 ;
-            sh:path schema:identifier ],
-        [ sh:description "Weight of an animal, measured in milligrams" ;
-            sh:maxCount 1 ;
-            sh:order 3 ;
-            sh:path TUT:weight_in_mgs ] ;
+            sh:path schema:identifier ] ;
     sh:targetClass TUT:Animal .
 
 TUT:AnimalCollection a sh:NodeShape ;

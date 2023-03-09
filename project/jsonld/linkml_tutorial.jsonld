@@ -700,9 +700,9 @@
   ],
   "metamodel_version": "1.7.0",
   "source_file": "linkml_tutorial.yaml",
-  "source_file_date": "2023-03-08T23:00:44",
+  "source_file_date": "2023-03-08T23:10:07",
   "source_file_size": 5430,
-  "generation_date": "2023-03-08T23:07:33",
+  "generation_date": "2023-03-09T00:03:21",
   "@type": "SchemaDefinition",
   "@context": [
     "project/jsonld/linkml_tutorial.context.jsonld",

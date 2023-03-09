@@ -32,10 +32,10 @@ linkml:topValue a owl:DatatypeProperty ;
     dcterms:license "MIT" ;
     dcterms:title "linkml-tutorial" ;
     rdfs:seeAlso "https://tkphd.github.io/linkml-tutorial" ;
-    linkml:generation_date "2023-03-08T23:07:37" ;
+    linkml:generation_date "2023-03-09T00:03:25" ;
     linkml:metamodel_version "1.7.0" ;
     linkml:source_file "linkml_tutorial.yaml" ;
-    linkml:source_file_date "2023-03-08T23:00:44" ;
+    linkml:source_file_date "2023-03-08T23:10:07" ;
     linkml:source_file_size 5430 .
 
 TUT:Breeds a owl:Class,
@@ -146,19 +146,19 @@ TUT:Animal a owl:Class,
     rdfs:subClassOf [ a owl:Restriction ;
             owl:maxQualifiedCardinality 1 ;
             owl:onClass linkml:Uriorcurie ;
-            owl:onProperty TUT:breed ],
+            owl:onProperty TUT:species ],
         [ a owl:Restriction ;
             owl:maxQualifiedCardinality 1 ;
             owl:onClass linkml:Integer ;
             owl:onProperty TUT:weight_in_mgs ],
         [ a owl:Restriction ;
             owl:maxQualifiedCardinality 1 ;
-            owl:onClass linkml:Uriorcurie ;
-            owl:onProperty TUT:species ],
-        [ a owl:Restriction ;
-            owl:maxQualifiedCardinality 1 ;
             owl:onClass linkml:String ;
             owl:onProperty TUT:color ],
+        [ a owl:Restriction ;
+            owl:maxQualifiedCardinality 1 ;
+            owl:onClass linkml:Uriorcurie ;
+            owl:onProperty TUT:breed ],
         TUT:NamedThing ;
     skos:altLabel "pet" ;
     skos:definition "A specific animal" ;
@@ -171,10 +171,6 @@ TUT:Person a owl:Class,
         linkml:ClassDefinition ;
     rdfs:label "Person" ;
     rdfs:subClassOf [ a owl:Restriction ;
-            owl:onClass TUT:PersonStatus ;
-            owl:onProperty TUT:vital_status ;
-            owl:qualifiedCardinality 1 ],
-        [ a owl:Restriction ;
             owl:maxQualifiedCardinality 1 ;
             owl:onClass linkml:String ;
             owl:onProperty schema:email ],
@@ -185,6 +181,10 @@ TUT:Person a owl:Class,
         [ a owl:Restriction ;
             owl:onClass linkml:Uriorcurie ;
             owl:onProperty schema:identifier ;
+            owl:qualifiedCardinality 1 ],
+        [ a owl:Restriction ;
+            owl:onClass TUT:PersonStatus ;
+            owl:onProperty TUT:vital_status ;
             owl:qualifiedCardinality 1 ],
         TUT:NamedThing ;
     skos:definition "A specific person" ;
@@ -217,21 +217,21 @@ TUT:NamedThing a owl:Class,
         linkml:ClassDefinition ;
     rdfs:label "NamedThing" ;
     rdfs:subClassOf [ a owl:Restriction ;
+            owl:maxQualifiedCardinality 1 ;
+            owl:onClass linkml:Date ;
+            owl:onProperty schema:birthDate ],
+        [ a owl:Restriction ;
             owl:onClass linkml:Uriorcurie ;
             owl:onProperty schema:identifier ;
             owl:qualifiedCardinality 1 ],
-        [ a owl:Restriction ;
-            owl:maxQualifiedCardinality 1 ;
-            owl:onClass linkml:Integer ;
-            owl:onProperty TUT:age_in_years ],
         [ a owl:Restriction ;
             owl:maxQualifiedCardinality 1 ;
             owl:onClass linkml:String ;
             owl:onProperty schema:name ],
         [ a owl:Restriction ;
             owl:maxQualifiedCardinality 1 ;
-            owl:onClass linkml:Date ;
-            owl:onProperty schema:birthDate ] ;
+            owl:onClass linkml:Integer ;
+            owl:onProperty TUT:age_in_years ] ;
     skos:definition "A generic entity that has its own name" ;
     skos:exactMatch schema:Thing .
 
