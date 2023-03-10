@@ -1,5 +1,5 @@
 # Auto generated from linkml_tutorial.yaml by pythongen.py version: 0.9.0
-# Generation date: 2023-03-09T00:03:27
+# Generation date: 2023-03-10T14:50:52
 # Schema: linkml-tutorial
 #
 # id: https://w3id.org/tkphd/linkml-tutorial

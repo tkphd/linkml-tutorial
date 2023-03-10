@@ -682,6 +682,7 @@
       ],
       "slot_usage": {},
       "class_uri": "https://w3id.org/tkphd/linkml-tutorial/PersonCollection",
+      "tree_root": true,
       "@type": "ClassDefinition"
     },
     {
@@ -694,15 +695,14 @@
       ],
       "slot_usage": {},
       "class_uri": "https://w3id.org/tkphd/linkml-tutorial/AnimalCollection",
-      "tree_root": true,
       "@type": "ClassDefinition"
     }
   ],
   "metamodel_version": "1.7.0",
   "source_file": "linkml_tutorial.yaml",
-  "source_file_date": "2023-03-08T23:10:07",
+  "source_file_date": "2023-03-10T14:50:25",
   "source_file_size": 5430,
-  "generation_date": "2023-03-09T00:03:21",
+  "generation_date": "2023-03-10T14:50:47",
   "@type": "SchemaDefinition",
   "@context": [
     "project/jsonld/linkml_tutorial.context.jsonld",

@@ -138,10 +138,10 @@
     "additionalProperties": true,
     "metamodel_version": "1.7.0",
     "properties": {
-        "animals": {
-            "description": "A collection of animals that live with a person",
+        "entities": {
+            "description": "A collection of people",
             "items": {
-                "$ref": "#/$defs/Animal"
+                "$ref": "#/$defs/Person"
             },
             "type": "array"
         }

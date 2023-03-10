@@ -112,9 +112,9 @@ classes:
       A group of people
     slots:
       - entities
+    tree_root: true  # entrypoint into a hierarchy?
 
   AnimalCollection:
-    tree_root: true  # entrypoint into a hierarchy?
     description: >-
       A group of animals
     slots:
